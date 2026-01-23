@@ -288,8 +288,7 @@ Rather than adding education, comparisons, and savings mechanisms, the solution 
 
 ***
 
-## 📊 Dataset Variables Reference [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/61593299/0fe5952e-9968-4e3a-8eec-f1daf2ea0793/Product-Case-Study.pdf)
-
+## 📊 Dataset Variables Reference 
 | Variable | Description |
 |----------|-------------|
 | UserID | Unique identifier for each user |
