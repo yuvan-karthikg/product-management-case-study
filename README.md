@@ -1,15 +1,15 @@
 ***
 
-# 📊 Product Management Case Study Portfolio
+# Product Management Case Study Portfolio
 
 A collection of data-driven product management analyses demonstrating problem identification, opportunity prioritization, solution design, and go-to-market strategy for digital products.
 
-## 📌 Overview
+## Overview
 
 This portfolio contains two comprehensive PM case studies where I analyzed real-world product challenges, identified root causes through data, proposed focused solutions, and defined MVPs with measurable success metrics. Each study demonstrates end-to-end product thinking from discovery through launch strategy. 
 ***
 
-## 📂 Case Study 1: Digital Insurance Purchase Conversion Optimization
+## Case Study 1: Digital Insurance Purchase Conversion Optimization
 
 ### The Challenge
 
@@ -130,19 +130,19 @@ Simplification of payment helps reduce cognitive overload across ALL drop-off st
 
 **1) Dynamic Pricing**
 - Offer cheaper "basic" plans at payment or reduce pricing
-- ❌ May impact higher sales; doesn't address root cause; makes decisions harder
+- May impact higher sales; doesn't address root cause; makes decisions harder
 
 **2) Policy Comparison Tool**
 - Side-by-side policy comparisons at selection stage
-- ❌ Targets smaller problem (77 vs 120 drop-offs); lower ROI 
+- Targets smaller problem (77 vs 120 drop-offs); lower ROI 
 
 **3) Insurance Savings Pot**
 - Weekly savings in locked pot with auto-activation after weeks
-- ❌ Doesn't solve urgency; issue wasn't affordability; complex build
+- Doesn't solve urgency; issue wasn't affordability; complex build
 
 ***
 
-## 🎯 Key Product Management Principles Applied
+## Key Product Management Principles Applied
 
 ### 1. Data-Driven Root Cause Analysis
 Rather than accepting surface-level feedback, I triangulated multiple data signals (feedback sentiment, intent scores, time-on-page, premium amounts, salary distribution) to identify cognitive overload as the true problem.
@@ -167,7 +167,7 @@ Metrics move beyond vanity numbers to actionable KPIs:
 
 ***
 
-## 🛠️ Analytical Frameworks Used
+## Analytical Frameworks Used
 
 ### Conversion Funnel Analysis
 Broke down drop-offs by stage to identify bottlenecks 
@@ -186,29 +186,29 @@ Projected revenue impact: 95 additional customers × AED 99.97 × 12 months = AE
 
 ***
 
-## 📚 What This Portfolio Demonstrates
+## What This Portfolio Demonstrates
 
 ### Product Thinking
-- ✅ Identifying opportunities through data, not guesswork
-- ✅ Diagnosing root causes through multiple signal triangulation
-- ✅ Prioritizing ruthlessly based on impact-effort tradeoffs
-- ✅ Designing focused solutions that solve problems at scale
+- Identifying opportunities through data, not guesswork
+- Diagnosing root causes through multiple signal triangulation
+- Prioritizing ruthlessly based on impact-effort tradeoffs
+- Designing focused solutions that solve problems at scale
 
 ### Execution Capability
-- ✅ MVP scoping that balances validation with minimal risk
-- ✅ Launch strategy with phased rollout and feedback loops
-- ✅ Success metrics that connect to business outcomes
-- ✅ Clear communication of complex analysis to stakeholders
+- MVP scoping that balances validation with minimal risk
+- Launch strategy with phased rollout and feedback loops
+- Success metrics that connect to business outcomes
+- Clear communication of complex analysis to stakeholders
 
 ### Business Acumen
-- ✅ Understanding conversion economics and funnel optimization
-- ✅ Recognizing psychological factors (cognitive load) in user behavior
-- ✅ Quantifying impact in business terms (revenue, CAC, LTV)
-- ✅ Managing trade-offs (speed vs comprehensiveness)
+- Understanding conversion economics and funnel optimization
+- Recognizing psychological factors (cognitive load) in user behavior
+- Quantifying impact in business terms (revenue, CAC, LTV)
+- Managing trade-offs (speed vs comprehensiveness)
 
 ***
 
-## 📈 Key Takeaways
+## Key Takeaways
 
 | Aspect | Outcome |
 |--------|---------|
@@ -221,7 +221,7 @@ Projected revenue impact: 95 additional customers × AED 99.97 × 12 months = AE
 | **Time to Validate** | 2-4 weeks via A/B test |
 ***
 
-## 🎓 Methodological Rigor
+## Methodological Rigor
 
 ### Problem Validation
 Data points collected and cross-referenced:
@@ -245,7 +245,7 @@ Rather than assuming affordability was the issue, tested through:
 
 ***
 
-## 🚀 Applicability to Real-World PM Challenges
+## Applicability to Real-World PM Challenges
 
 This analysis demonstrates approach to common product problems:
 - **Conversion optimization**: Funnel analysis + behavioral insights
@@ -255,7 +255,7 @@ This analysis demonstrates approach to common product problems:
 
 ***
 
-## 💡 Insights for Product Managers
+## Insights for Product Managers
 
 ### The Power of "Why" Questions
 Initial assumption: Users can't afford insurance
@@ -277,7 +277,7 @@ Rather than adding education, comparisons, and savings mechanisms, the solution 
 
 ***
 
-## 🎯 Next Steps for Real Implementation
+## Next Steps for Real Implementation
 
 1. **Week 1**: Design payment UI mockups for soft launch
 2. **Week 2**: Build A/B test infrastructure and instrumentation
@@ -288,7 +288,7 @@ Rather than adding education, comparisons, and savings mechanisms, the solution 
 
 ***
 
-## 📊 Dataset Variables Reference 
+## Dataset Variables Reference 
 | Variable | Description |
 |----------|-------------|
 | UserID | Unique identifier for each user |
