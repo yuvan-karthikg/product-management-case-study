@@ -1,310 +1,209 @@
+# Product Management Case Study: Digital Insurance Purchase Conversion
+
+A data-driven product case study covering problem identification, opportunity prioritization, solution design, MVP definition and launch strategy for a digital insurance product in a mobile app.
+
+**Deliverable:** `Yuvan Insurance Case Study.pdf` (17 slides)
+**Tools:** Excel (pivot tables), Python (pandas) for verification, Canva
+
 ***
 
-# Product Management Case Study Portfolio
+## The Challenge
 
-A collection of data-driven product management analyses demonstrating problem identification, opportunity prioritization, solution design, and go-to-market strategy for digital products.
+Many users who start the insurance purchase journey don't finish it. Customer support hears repeated confusion about policy details, add-on options and payment steps. The goal: find out what's happening and identify the highest-impact opportunity to improve conversion.
 
-## Overview
-
-This portfolio contains two comprehensive PM case studies where I analyzed real-world product challenges, identified root causes through data, proposed focused solutions, and defined MVPs with measurable success metrics. Each study demonstrates end-to-end product thinking from discovery through launch strategy. 
 ***
 
-## Case Study 1: Digital Insurance Purchase Conversion Optimization
+## Step 0: Data Check
 
-### The Challenge
+Before analysing anything, I checked whether the dataset agrees with itself. It doesn't:
 
-A digital insurance product on a mobile app experienced significant user drop-offs during the purchase journey. Despite strong user interest, support feedback indicated confusion around policy details, add-on options, and payment steps. The goal was to identify and prioritize meaningful opportunities to improve conversions.
+| Column | Says | Conversion |
+|--------|------|-----------|
+| `SignupCompleted` | 360 of 500 completed | 72.0% |
+| `DropOffStage` | 253 of 500 have no drop-off stage | **50.6%** |
 
-### Key Findings
+The two columns disagree on 247 of 500 users. 177 are marked completed but also have a drop-off stage, and 70 are marked not completed with no stage.
 
-**Current State** 
-- 500 users started insurance purchase flow
-- Only 253 completed signup (50.6% conversion rate)
-- 247 users abandoned (49.4% drop-off rate)
-- 120 users exited at payment stage (48.58% of all drop-offs) — the biggest leak 
+**Decision:** I used `DropOffStage` as the source of truth. It's the only column that shows *where* users leave, and it gives the more conservative baseline. I excluded `AbandonTimestamp` because it's one row per hour for all 500 users and carries no behavioural signal. In a real team, I'd confirm event definitions with data engineering first.
 
-**Drop-off Distribution** 
-| Stage | Drop-offs | % of Total |
-|-------|-----------|-----------|
-| Payment | 120 | 48.58% |
-| Policy Selection | 77 | 31.21% |
-| Terms Agreement | 50 | 20.24% |
-| **Total** | **247** | **100%** |
+***
 
-**Root Cause Analysis** 
+## Key Findings
 
-Rather than affordability, the data revealed **cognitive overload** as the primary driver:
+### Where users drop off
 
-- **Feedback Dominance**: "Signup too complicated" was the #1 complaint with 102 mentions, significantly more than "Payment issues" (12 mentions) 
-- **Intent Mismatch**: Average intent score for payment drop-offs (5.36) vs completers (5.48) showed users wanted to buy—price wasn't the barrier 
-- **Time Paradox**: Payment drop-offs spent 126.38 seconds vs completers' 120.38 seconds, suggesting difficulty in decision-making rather than speed 
-- **Premium Parity**: Average insurance premium for drop-offs (AED 100.85) nearly matched completers (AED 99.76), ruling out affordability as primary issue 
+| Stage | Drop-offs | % of all drop-offs | Step drop rate* |
+|-------|-----------|--------------------|-----------------|
+| Policy Selection | 77 | 31.17% | 15.4% (77 of 500) |
+| Terms Agreement | 50 | 20.24% | 11.8% (50 of 423) |
+| **Payment** | **120** | **48.58%** | **32.2% (120 of 373)** |
+| **Total** | **247** | **100%** | |
 
-**Add-On Impact** 
-- Users exposed to add-on options were **72% more likely to drop at payment** 
-- 74.1% of payment drop-offs had add-on exposure vs 25.9% without 
-- Payment feedback for add-on-exposed users emphasized "complexity" over "cost"
+\*Share of users who reached that step and left there, assuming the flow runs Policy Selection → Terms → Payment.
 
-### The Solution: Simplified Payment Experience
+**Payment is the leakiest step: 1 in 3 users who reach it leave.**
 
-**Why This Works** 
-- Targets the highest drop-off stage (49% of all abandonments)
-- Solves root cause (complexity), not symptoms
-- Requires no pricing or policy changes
-- Fast to build, easy to test, low risk
-- Directly addresses "Signup too complicated" feedback
+### Why they leave: testing three explanations
 
-**How It Works** 
-- Single, clear payment summary with final payable amount
-- Optional add-ons hidden by default (progressive disclosure)
-- Recommended payment option pre-selected (monthly)
+**1. Price doesn't separate droppers from buyers**
+- Average premium: payment drop-offs AED 100.85 vs completers AED 99.76
+- Payment drop-offs are flat across salary bands: 33 in <2000 AED vs 34 in 4000+ AED
+- Users who reported "Payment issues" actually reached the end *more* often (58% vs 51% overall)
+- → Affordability isn't the main driver
+
+**2. Neither does intent**
+- Average intent score: completers 5.48, payment drop-offs 5.36, policy-selection drop-offs 5.97
+- → Drop-off isn't about *who* the user is. It's about what the step asks of them
+
+**3. Complexity over-indexes at payment**
+- "Signup too complicated" is the #1 complaint overall (102 of 500 users)
+- It's 25% of payment drop-offs vs 18% of completers
+- Users who contacted support before signup complete less often: 42% vs 53%
+- Time in flow is 126s for payment drop-offs vs 120s for completers (+5%). That's a sign of hesitation but weak on its own
+- → Points to **cognitive overload at payment**
+
+### What add-ons do (and don't do)
+
+My first hypothesis was that add-on exposure drives payment drop-off. The data doesn't support it:
+- Payment drop rate: 24.7% with add-ons vs 22.1% without. That's +2.6 pts and not statistically significant (p ≈ 0.54)
+- 74% of payment drop-offs saw add-ons, but so did 72% of all users and 71% of completers, so this is the base rate
+- Completion: 50.0% with add-ons vs 52.1% without
+
+**Takeaway:** collapsing add-ons is good hygiene (one fewer decision at payment), but the lift has to come from simplifying the payment step as a whole.
+
+***
+
+## The Solution: Simplified Payment Step
+
+**How it works**
+- Single, clear payment summary with the final payable amount
+- Optional add-ons collapsed by default (progressive disclosure)
+- Payment option chosen earlier in the flow pre-selected
 - One primary CTA: "Pay & Activate Policy"
-- Lightweight trust cues (cancel anytime, coverage start)
+- Lightweight trust cues (cancel anytime, coverage start date)
+
+**Why this wins**
+- Targets the leakiest step (32% step drop rate, 120 users)
+- Addresses the signal that over-indexes at payment (complexity), not price
+- No pricing, policy or backend changes, so it's fast to build and low risk
+- Easy to validate with an A/B test
 
 ### MVP Scope
 
-**Included**
-- Collapsed add-ons by default
-- Clear cost breakdown (base + optional)
-- Monthly payment auto-selected
-- Inline trust cues
-- Progressive disclosure (one decision at a time)
+| Included | Excluded |
+|----------|----------|
+| Collapsed add-ons by default | Pricing changes |
+| Clear cost breakdown (base + optional) | New education flows |
+| Pre-selected payment option | Policy rework |
+| Inline trust cues | Backend payment changes |
+| One decision at a time | |
 
-**Excluded**
-- Pricing changes
-- New education flows
-- Policy rework
-- Backend payment changes
-
-**Goal**: Validate whether reducing decision load increases payment completion
-
-### Launch Strategy 
-**Phase 1: Soft Launch (15% Traffic)**
-- A/B test with 15% of users in new version
-- Monitor for bugs and user confusion
-- Track drop-offs, time on page, payment errors 
-
-**Phase 2: Feedback & Optimization**
-- Refine add-on reveal experience
-- Align support team
-- Gather qualitative feedback
-
-**Phase 3: Full Rollout (100% Traffic)**
-- Roll out to all eligible users
-- Monitor weekly improvements
-- Prepare follow-up enhancements (personalization, etc.)
-- Continue gathering feedback 
-
-### Success Metrics 
-
-**Primary KPI: Overall Conversion Rate**
-- Baseline: 50.6% (253 ÷ 500 users)
-- Target: 70%+ (348+ ÷ 500 users) ≈ 90-100 additional conversions 
-
-**Secondary KPIs** 
-- Time to Complete: Reduce from 126s → <90s (30% reduction)
-- Payment retry/failure rate: Monitor for decrease
-- "Signup too complicated" feedback mentions: Track decline
-- Customer support interactions: Measure reduction
-
-**Why 70% is Realistic** 
-Simplification of payment helps reduce cognitive overload across ALL drop-off stages, not just payment
-
-### Expected Impact
-
-**User Impact**
-- Payment drop-offs: 120 → 60 saved (50% reduction)
-- Policy Selection drop-offs: 77 → 23 saved (30% reduction)
-- Terms Agreement drop-offs: 50 → 12 saved (25% reduction)
-- **Total Saved: 95 users**
-- New conversion rate: 348 ÷ 500 = **69.6% ≈ 70%** 
-- Improvement: **+19 percentage points (39% relative lift)** 
-
-**Revenue Impact**
-- Average premium: AED 99.97/month
-- Expected: +95 customers = +AED 9,497/month
-- **Annual Revenue Boost: AED 114,000** 
-- Secondary benefits: Improved customer sentiment, user trust, repeat usage
-
-### Alternative Solutions Considered (and Why Not)
-
-**1) Dynamic Pricing**
-- Offer cheaper "basic" plans at payment or reduce pricing
-- May impact higher sales; doesn't address root cause; makes decisions harder
-
-**2) Policy Comparison Tool**
-- Side-by-side policy comparisons at selection stage
-- Targets smaller problem (77 vs 120 drop-offs); lower ROI 
-
-**3) Insurance Savings Pot**
-- Weekly savings in locked pot with auto-activation after weeks
-- Doesn't solve urgency; issue wasn't affordability; complex build
+**Goal:** validate whether reducing decision load at payment increases payment completion.
 
 ***
 
-## Key Product Management Principles Applied
+## Success Metrics
 
-### 1. Data-Driven Root Cause Analysis
-Rather than accepting surface-level feedback, I triangulated multiple data signals (feedback sentiment, intent scores, time-on-page, premium amounts, salary distribution) to identify cognitive overload as the true problem.
+**Primary KPI: payment-step completion** (paid ÷ reached payment)
+- Baseline: 67.8% (253 ÷ 373)
+- Target: 80.7% (40% fewer payment drop-offs, 120 → 72)
+- Test size: ~180 users reaching payment per arm (95% confidence, 80% power)
 
-### 2. Prioritization via Impact-Effort Matrix
-Among multiple opportunities, I selected the solution with:
-- **Highest impact**: 49% of drop-offs happen at payment stage
-- **Lowest effort**: No pricing, policy, or backend changes required
-- **Fastest validation**: Simple UI changes testable via A/B test
+**Secondary KPIs**
+- Overall conversion: 50.6% → ~60%
+- "Signup too complicated" among payment drop-offs: 25% → ≤18%
+- Pre-signup support contacts ↓
+- Time on payment step ↓ (directional, no hard target)
 
-### 3. Customer-Centric Problem Framing
-Shifted framing from "affordability" to "decision complexity"—this reframing revealed that users didn't need cheaper insurance; they needed a simpler decision process. 
+**Guardrails (must not get worse)**
+- Add-on attach rate
+- Average premium per policy
+- Payment failure / retry rate
+- Cancellations in the cooling-off period
 
-### 4. MVP-First Validation
-Rather than building comprehensive education flows, comparison tools, or policy changes, the MVP isolates a single variable (decision complexity) to test the hypothesis before bigger investments. 
-
-### 5. Rigorous Success Metrics
-Metrics move beyond vanity numbers to actionable KPIs:
-- **Primary metric** directly tracks hypothesis (conversion rate)
-- **Secondary metrics** diagnose why: time-to-complete, feedback sentiment, support volume
-- **Revenue tie-in** demonstrates business impact (AED 114K/year) 
+**Decision rule:** ship if payment-step completion beats control at 95% confidence and no guardrail drops by more than 2 pts. Otherwise iterate.
 
 ***
 
-## Analytical Frameworks Used
+## Expected Impact
 
-### Conversion Funnel Analysis
-Broke down drop-offs by stage to identify bottlenecks 
+Only payment-stage drop-offs are counted. A payment-page change can't recover users who left earlier in the flow.
 
-### Behavioral Analytics
-Used time-on-page and engagement patterns to infer user struggles 
+| Scenario | Fewer payment drop-offs | New policies | Conversion | Relative lift |
+|----------|-------------------------|--------------|------------|---------------|
+| Conservative | 25% | +30 | 56.6% | +12% |
+| **Target** | **40%** | **+48** | **60.2%** | **+19%** |
+| Stretch | 50% | +60 | 62.6% | +24% |
 
-### Cohort Analysis
-Compared high-intent vs low-intent, different salary bands, add-on vs non-add-on users to isolate variables 
-
-### Feedback Thematic Analysis
-Categorized open-text customer feedback to identify dominant pain points (complexity vs affordability)
-
-### Financial Modeling
-Projected revenue impact: 95 additional customers × AED 99.97 × 12 months = AED 114K annual uplift
+**Revenue (target case):** +48 policies × AED 99.97 average premium ≈ **+AED 4.8K in first premium payments per 500 starters**. Recurring value is higher because 57% of users pay monthly or quarterly. I'd size it properly once payment terms are confirmed. The dataset mixes one-off and instalment premiums, so multiplying by 12 would overstate it.
 
 ***
 
-## What This Portfolio Demonstrates
+## Launch Strategy
 
-### Product Thinking
-- Identifying opportunities through data, not guesswork
-- Diagnosing root causes through multiple signal triangulation
-- Prioritizing ruthlessly based on impact-effort tradeoffs
-- Designing focused solutions that solve problems at scale
+**Phase 1: Soft launch (15% of traffic, A/B test)**
+- Monitor bugs, errors and user confusion
+- Track the primary KPI, guardrails and qualitative feedback
 
-### Execution Capability
-- MVP scoping that balances validation with minimal risk
-- Launch strategy with phased rollout and feedback loops
-- Success metrics that connect to business outcomes
-- Clear communication of complex analysis to stakeholders
+**Phase 2: Feedback & optimization**
+- Refine the add-on reveal experience
+- Brief the support team on the new flow
 
-### Business Acumen
-- Understanding conversion economics and funnel optimization
-- Recognizing psychological factors (cognitive load) in user behavior
-- Quantifying impact in business terms (revenue, CAC, LTV)
-- Managing trade-offs (speed vs comprehensiveness)
+**Phase 3: Full rollout (100%)**
+- Roll out once the decision rule is met
+- Monitor weekly; prepare follow-ups such as personalization
+
+**Next bets after payment:** Policy Selection (77 drop-offs) and Terms (50). A policy comparison tool targets the "Unclear policy details" complaint (92 mentions).
 
 ***
 
-## Key Takeaways
+## Alternatives Considered
 
-| Aspect | Outcome |
-|--------|---------|
-| **Root Cause** | Cognitive overload (not affordability) from complex payment decisions |
-| **Highest-Impact Stage** | Payment (120 users, 48.58% of drop-offs) |
-| **Primary Lever** | Progressive disclosure + simplified decision tree |
-| **Expected Lift** | +19 percentage points conversion (39% relative improvement) | 
-| **Revenue Impact** | +AED 114K annually from this feature alone |
-| **Risk Level** | Low (UI only, no backend changes) |
-| **Time to Validate** | 2-4 weeks via A/B test |
-***
-
-## Methodological Rigor
-
-### Problem Validation
-Data points collected and cross-referenced:
-- User feedback analysis (thematic coding)
-- Behavioral analytics (time-on-page, flow patterns)
-- Cohort comparisons (intent score, salary band, add-on exposure)
-- Financial proxy data (premium amounts)
-
-### Hypothesis Testing
-Rather than assuming affordability was the issue, tested through:
-- Premium parity check (payment drop-offs vs completers)
-- Salary band distribution (drop-offs across all income levels)
-- Feedback sentiment (complexity mentioned 8.5x more than cost)
-- Intent mismatch (high intent users still dropping)
-
-### Solution Validation Plan
-- Soft launch: 15% traffic to catch bugs 
-- Feedback loop: Gather qualitative + quantitative data
-- Phased rollout: Build confidence before full deployment
-- Measurement framework: Primary + secondary KPIs tracked weekly
+| Option | Why not (for now) |
+|--------|-------------------|
+| **Dynamic / cheaper pricing** | Price doesn't separate droppers from buyers; adds another decision at payment; risks revenue |
+| **Policy comparison tool** | Good idea, but targets a smaller leak (77 vs 120). Strong next bet |
+| **Insurance savings pot** | Users want cover now, not in weeks; affordability isn't the main driver; complex build |
 
 ***
 
-## Applicability to Real-World PM Challenges
+## What I'd Highlight About My Approach
 
-This analysis demonstrates approach to common product problems:
-- **Conversion optimization**: Funnel analysis + behavioral insights
-- **Feature prioritization**: Impact-effort matrix + revenue modeling
-- **Launch strategy**: Phased rollout with learning loops
-- **Stakeholder communication**: Clear metrics + business impact quantification
-
-***
-
-## Insights for Product Managers
-
-### The Power of "Why" Questions
-Initial assumption: Users can't afford insurance
-True problem: Users freeze when faced with too many decisions
-Solution changed completely based on this insight 
-### Data Triangulation > Single Metric
-No single metric proved cognitive overload; it took:
-- Feedback analysis (complexity mentioned most)
-- Intent scores (users wanted it)
-- Time-on-page (spending time, not rushing)
-- Premium parity (not a cost issue)
-Together, they paint a clear picture 
-### Simple > Comprehensive
-Rather than adding education, comparisons, and savings mechanisms, the solution removes complexity. This is more powerful because it:
-- Faster to build (weeks vs months)
-- Easier to understand (less to teach users)
-- Lower risk (no backend changes)
-- More likely to succeed (addresses root cause)
+- **Checked the data before trusting it:** found and resolved conflicting outcome columns
+- **Tested explanations instead of assuming them:** price, intent and complexity, each checked against completers
+- **Corrected my own first hypothesis:** the add-on effect disappeared once compared against the base rate
+- **Sized impact conservatively:** counted only the users the fix can actually reach, with a range rather than a single number
+- **Paired a primary KPI with guardrails:** so conversion isn't bought by losing add-on revenue
 
 ***
 
-## Next Steps for Real Implementation
+## Dataset Variables
 
-1. **Week 1**: Design payment UI mockups for soft launch
-2. **Week 2**: Build A/B test infrastructure and instrumentation
-3. **Week 3**: Soft launch with 15% traffic monitoring
-4. **Week 4**: Collect feedback, iterate, prepare 50% rollout
-5. **Week 5-6**: 50% rollout with monitoring and refinement
-6. **Week 7+**: Full rollout, metric tracking, prepare follow-ups
+500 users, 24 columns (synthetic case-study data).
 
-***
-
-## Dataset Variables Reference 
 | Variable | Description |
 |----------|-------------|
 | UserID | Unique identifier for each user |
 | Age | Age of the user |
-| SalaryBand (AED) | Salary range segment (e.g., <2000, 2000-3000) |
-| PolicyType | Health, Life, or Accident |
-| PlanDuration | 6 Months, 1 Year, or 2 Year |
-| PaymentType | Monthly, One-Off, or Quarterly |
-| InsurancePremiumAmount | Premium cost in AED |
-| AddOnsSelected | Optional add-on cover (e.g., FamilyCover) |
+| SalaryBand (AED) | Salary range segment (<2000, 2000-3000, 3000-4000, 4000+) |
+| PolicyType | Health, Life or Accident |
+| PlanDuration | 6 Months, 1 Year or 2 Year |
+| PaymentType | Monthly, One-Off or Quarterly |
+| InsurancePremiumAmount | Premium cost in AED (monthly or one-time) |
+| AddonExposure | Whether the user was shown add-on options |
+| AddOnsSelected | Optional add-on cover (FamilyCover, AccidentAddOn, CriticalIllness) |
 | AddonDropOff | Abandoned after seeing add-on pricing |
 | SignupCompleted | Completed full insurance signup |
-| TimeOnSignupPage(s) | Time spent in signup flow (seconds) |
-| DropOffStage | Policy Selection, Payment, Terms Agreement, etc. |
-| TermsPageScrollDepth (%) | Terms & conditions page scroll depth |
+| TimeOnSignupPage(s) | Time spent in the signup flow (seconds) |
+| DropOffStage | Policy Selection, Terms Agreement or Payment |
+| TermsPageScrollDepth (%) | Terms & conditions scroll depth |
+| AbandonTimestamp | Timestamp of exit (excluded, see Data Check) |
 | IntentScore | Predicted interest level (1-10) |
 | PolicyLiteracyScore | Understanding of policy info (0-10) |
-
-***
+| AcquisitionSource | App Store, Referral, Employer Push, WhatsApp Link, SMS Blast |
+| SupportInteractionBeforeSignup | Contacted support before attempting signup |
+| DaysSinceSignup | Days on the platform before trying insurance |
+| PreviousProductUsed | Mobile Recharge, Money Transfer or none |
+| PolicyRenewalIntent | Likely, Unlikely, Unsure or N/A |
+| ReferralSharedAfterSignup | Shared a referral after signup |
+| CustomerFeedback | Open-text feedback category |
